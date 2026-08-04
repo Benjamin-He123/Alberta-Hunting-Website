@@ -40,6 +40,20 @@ const clickMarkerIcon = L.divIcon({
 });
 
 
+// --- Helper to build a label with a color swatch ---
+function swatchLabel(color, text) {
+    return `<span style="
+        display:inline-block;
+        width:12px;
+        height:12px;
+        background:${color};
+        border-radius:3px;
+        margin-right:6px;
+        vertical-align:middle;
+    "></span>${text}`;
+}
+
+
 // =====================================================
 // Data layers (WMU, Crown Land, Parks, First Nations, Metis)
 // =====================================================
@@ -103,11 +117,11 @@ Promise.all([
 
         // --- One single overlays object for everything ---
         const overlays = {
-            "WMU Boundaries": wmuLayer,
-            "Crown Land": crownLayer,
-            "Provincial/National Parks": parkLayer,
-            "First Nations Reserves": firstNationsLayer,
-            "Metis Settlements": metisLayer
+            [swatchLabel("#ae2e1d", "WMU Boundaries")]: wmuLayer,
+            [swatchLabel("#21c153", "Crown Land")]: crownLayer,
+            [swatchLabel("black", "Provincial/National Parks")]: parkLayer,
+            [swatchLabel("#d89e22", "First Nations Reserves")]: firstNationsLayer,
+            [swatchLabel("#004773", "Metis Settlements")]: metisLayer
         };
 
         // --- Restore saved layer visibility from localStorage ---
@@ -171,7 +185,7 @@ Promise.all([
 // User location
 // =====================================================
 
-map.locate({ setView: true, maxZoom: 12 });
+map.locate({ setView: false, maxZoom: 12 });
 
 map.on("locationfound", e => {
     L.marker(e.latlng).addTo(map);
