@@ -53,6 +53,10 @@ function swatchLabel(color, text) {
     "></span>${text}`;
 }
 
+function toggleDisclaimer() {
+    document.getElementById("disclaimer-box").classList.toggle("visible");
+}
+
 
 // =====================================================
 // Data layers (WMU, Crown Land, Parks, First Nations, Metis)
