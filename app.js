@@ -69,7 +69,7 @@ Promise.all([
 
         // --- WMU Boundaries ---
         const wmuLayer = L.geoJSON(wmuData, {
-            style: { color: "#ae2e1d", weight: 1, fill: false, opacity: 1 },
+            style: { color: "#d89e22 ", weight: 1, fill: false, opacity: 1 },
             onEachFeature: (feature, layer) => {
                 layer.bindPopup(`
                     <h3>Wildlife Management Unit</h3>
@@ -90,7 +90,7 @@ Promise.all([
         // --- Crown Land (Green Area only) ---
         const crownLayer = L.geoJSON(crownData, {
             filter: feature => feature.properties.t18834Name === "Green Area",
-            style: { color: "#21c153", weight: 1, fillOpacity: 0.1 }
+            style: { color: "#21c153", weight: 2 , fillOpacity: 0.1 }
         });
 
         // --- Provincial/National Parks ---
@@ -101,7 +101,7 @@ Promise.all([
 
         // --- First Nations Reserves ---
         const firstNationsLayer = L.geoJSON(firstNationsData, {
-            style: { color: "#d89e22", weight: 1, fillOpacity: 0.3 },
+            style: { color: "#ae2e1d", weight: 1, fillOpacity: 0.3 },
             onEachFeature: (feature, layer) => {
                 layer.bindPopup(`<h3>First Nations Reserve</h3><p>${feature.properties.IRES_NAME || "Unknown"}</p>`);
             }
@@ -117,10 +117,10 @@ Promise.all([
 
         // --- One single overlays object for everything ---
         const overlays = {
-            [swatchLabel("#ae2e1d", "WMU Boundaries")]: wmuLayer,
+            [swatchLabel("#d89e22", "WMU Boundaries")]: wmuLayer,
             [swatchLabel("#21c153", "Crown Land")]: crownLayer,
             [swatchLabel("black", "Provincial/National Parks")]: parkLayer,
-            [swatchLabel("#d89e22", "First Nations Reserves")]: firstNationsLayer,
+            [swatchLabel("#ae2e1d", "First Nations Reserves")]: firstNationsLayer,
             [swatchLabel("#004773", "Metis Settlements")]: metisLayer
         };
 
