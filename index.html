@@ -8,8 +8,23 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="pictures/favicon.png">
+
+
     <title>Alberta Hunting Map – WMU Boundaries, Crown Land & Parks</title>
     <meta name="description" content="Interactive map of Alberta Wildlife Management Units, Crown Land, parks, and First Nations reserves for hunters.">
+
+
+    <!-- Open Graph tags -->
+    <meta property="og:title" content="Alberta Hunting Map – WMU Boundaries, Crown Land & Parks">
+    <meta property="og:description" content="Interactive map of Alberta Wildlife Management Units, Crown Land, parks, and First Nations reserves for hunters.">
+    <meta property="og:image" content="https://albertahuntingmap.ca/preview.png">
+    <meta property="og:url" content="https://albertahuntingmap.ca/">
+    <meta property="og:type" content="website">
+
+    <!-- Canonical -->
+    <link rel="canonical" href="https://albertahuntingmap.ca/">
 
     <div id ="map_header">
         <header>
@@ -17,8 +32,8 @@
         </header>
         <div id="map"></div>   
 
-        <div id="disclaimer-toggle" onclick="toggleDisclaimer()">⚠️</div>
-        
+        <div id="disclaimer-toggle" onclick="toggleDisclaimer()" title="Disclaimer">⚠️</div>
+
         <div id="disclaimer-box">
             Boundaries may not be 100% accurate. Always verify with official Alberta government sources before hunting.
         </div>

@@ -67,9 +67,10 @@ Promise.all([
     fetch("data/Green Area.geojson").then(res => res.json()),
     fetch("data/Protected Area Designations.geojson").then(res => res.json()),
     fetch("data/First Nations Reserve.geojson").then(res => res.json()),
-    fetch("data/Metis Settlement.geojson").then(res => res.json())
+    fetch("data/Metis Settlement.geojson").then(res => res.json()),
+    fetch("data/WildlifeCorridor.geojson").then(res => res.json())
 ])
-    .then(([wmuData, crownData, parkData, firstNationsData, metisData]) => {
+    .then(([wmuData, crownData, parkData, firstNationsData, metisData, wildlifeCorridorData]) => {
 
         // --- WMU Boundaries ---
         const wmuLayer = L.geoJSON(wmuData, {
@@ -119,13 +120,23 @@ Promise.all([
             }
         });
 
+        /// --- Wild life corridors --- 
+        const wildlifeCorridorLayer = L.geoJSON(wildlifeCorridorData, {
+            style: { color: "black", weight: 1, fillOpacity: 0.3 },
+            onEachFeature: (feature, layer) => {
+                layer.bindPopup(`<h3>Wildlife Corridor</h3><p>${feature.properties.Corridor_Name || "Unknown"}</p>`);
+            }
+        });
+
         // --- One single overlays object for everything ---
         const overlays = {
             [swatchLabel("#d89e22", "WMU Boundaries")]: wmuLayer,
             [swatchLabel("#21c153", "Crown Land")]: crownLayer,
             [swatchLabel("black", "Provincial/National Parks")]: parkLayer,
+            [swatchLabel("black", "Wildlife Corridors")]: wildlifeCorridorLayer,
             [swatchLabel("#ae2e1d", "First Nations Reserves")]: firstNationsLayer,
-            [swatchLabel("#004773", "Metis Settlements")]: metisLayer
+            [swatchLabel("#004773", "Metis Settlements")]: metisLayer,
+     
         };
 
         // --- Restore saved layer visibility from localStorage ---
