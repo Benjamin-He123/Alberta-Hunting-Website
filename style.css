@@ -64,12 +64,12 @@ html, body {
 
 #distance-tool {
     position: absolute;
-    bottom: 52px; /* sits just above the disclaimer icon (10px + 32px + 10px gap) */
-    left: 14px;
+    bottom: 17px; /* sits just above the disclaimer icon (10px + 32px + 10px gap) */
+    left: 50px;
     z-index: 1000;
-    background: yellow;
-    width: 31px;
-    height: 31px;
+    background: #F5F5F5;
+    width: 28px;
+    height: 28px;
     border-radius: 50%;
     display: flex;
     align-items: center;
