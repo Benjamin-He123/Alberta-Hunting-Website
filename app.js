@@ -252,6 +252,11 @@ loadSavedMarkers();
 
 // --- Click the map to start placing a marker ---
 map.on("click", e => {
+    if (measuring) {
+        handleMeasureClick(e);
+        return; // don't place a marker if in measuring mode
+    }
+
     pendingCoords = e.latlng;
 
     // Open a temporary popup asking for a description
@@ -289,3 +294,66 @@ function deleteMarker(index) {
     userMarkers[index] = null;
     saveMarkers();
 }
+
+// =====================================================
+// Distance measurement tool
+// =====================================================
+
+let measuring = false;
+let measurePoints = [];
+let measureMarkers = [];
+let measureLine = null;
+
+function toggleMeasureTool() {
+    measuring = !measuring;
+    const btn = document.getElementById("distance-tool");
+
+    if (measuring) {
+        clearMeasurement(); // reset any previous measurement first
+        btn.classList.add("active");
+        map.getContainer().style.cursor = "crosshair";
+    } else {
+        btn.classList.remove("active");
+        map.getContainer().style.cursor = "";
+    }
+}
+
+function handleMeasureClick(e) {
+    measurePoints.push(e.latlng);
+
+    const marker = L.circleMarker(e.latlng, {
+        radius: 3,
+        color: "red",
+        fillColor: "red",
+        fillOpacity: 1
+    }).addTo(map);
+    measureMarkers.push(marker);
+
+    if (measurePoints.length === 2) {
+        measureLine = L.polyline(measurePoints, { color: "red", weight: 2, dashArray: "6 6" }).addTo(map);
+
+        const distanceKm = measurePoints[0].distanceTo(measurePoints[1]) / 1000;
+
+        const resultBox = document.getElementById("distance-result");
+        resultBox.textContent = `Distance: ${distanceKm.toFixed(2)} km`;
+        resultBox.style.display = "block";
+
+        // measuring mode auto-turns off after the second point
+        measuring = false;
+        document.getElementById("distance-tool").classList.remove("active");
+        map.getContainer().style.cursor = "";
+    }
+}
+
+function clearMeasurement() {
+    measurePoints = [];
+    measureMarkers.forEach(m => map.removeLayer(m));
+    measureMarkers = [];
+    if (measureLine) {
+        map.removeLayer(measureLine);
+        measureLine = null;
+    }
+    document.getElementById("distance-result").style.display = "none";
+}
+
+document.getElementById("distance-tool").addEventListener("click", toggleMeasureTool);
