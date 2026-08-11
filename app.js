@@ -122,7 +122,7 @@ Promise.all([
 
         /// --- Wild life corridors --- 
         const wildlifeCorridorLayer = L.geoJSON(wildlifeCorridorData, {
-            style: { color: "black", weight: 1, fillOpacity: 0.3 },
+            style: { color: "black", weight: 2, fillOpacity: 0.3 },
             onEachFeature: (feature, layer) => {
                 layer.bindPopup(`<h3>Wildlife Corridor</h3><p>${feature.properties.Corridor_Name || "Unknown"}</p>`);
             }
@@ -287,7 +287,7 @@ function confirmMarker() {
     userMarkers.push(marker);
     saveMarkers();
 }
-
+//
 // --- Called when a marker's own delete button is clicked ---
 function deleteMarker(index) {
     map.removeLayer(userMarkers[index]);
