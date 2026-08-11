@@ -72,6 +72,24 @@ Promise.all([
 ])
     .then(([wmuData, crownData, parkData, firstNationsData, metisData, wildlifeCorridorData]) => {
 
+        // =====================================================
+        // User location
+        // =====================================================
+
+        map.locate({ setView: false, maxZoom: 12 });
+
+        map.on("locationfound", e => {
+            L.circleMarker(e.latlng, {
+                radius: 8,
+                fillColor: "#4285F4",
+                fillOpacity: 1,
+                color: "lightgray",
+                weight: 3
+            }).addTo(map);
+
+            L.circle(e.latlng, { radius: e.accuracy / 2 }).addTo(map);
+        });
+
         // --- WMU Boundaries ---
         const wmuLayer = L.geoJSON(wmuData, {
             style: { color: "#d89e22 ", weight: 1, fill: false, opacity: 1 },
@@ -195,17 +213,6 @@ Promise.all([
     })
     .catch(err => console.error("Failed to load one or more layers:", err));
 
-
-// =====================================================
-// User location
-// =====================================================
-
-map.locate({ setView: false, maxZoom: 12 });
-
-map.on("locationfound", e => {
-    L.marker(e.latlng).addTo(map);
-    L.circle(e.latlng, { radius: e.accuracy / 2 }).addTo(map);
-});
 
 map.on("locationerror", e => {
     console.error("Location access denied or unavailable:", e.message);
