@@ -287,7 +287,7 @@ function confirmMarker() {
     userMarkers.push(marker);
     saveMarkers();
 }
-//
+
 // --- Called when a marker's own delete button is clicked ---
 function deleteMarker(index) {
     map.removeLayer(userMarkers[index]);
