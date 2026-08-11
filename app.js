@@ -294,7 +294,7 @@ function deleteMarker(index) {
     userMarkers[index] = null;
     saveMarkers();
 }
-
+//
 // =====================================================
 // Distance measurement tool
 // =====================================================
