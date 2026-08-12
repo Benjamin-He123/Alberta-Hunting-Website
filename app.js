@@ -64,13 +64,14 @@ function toggleDisclaimer() {
 
 Promise.all([
     fetch("data/WMU.geojson").then(res => res.json()),
+    fetch("data/Recreational Access Grazing.geojson").then(res => res.json()),
     fetch("data/Green Area.geojson").then(res => res.json()),
     fetch("data/Protected Area Designations.geojson").then(res => res.json()),
     fetch("data/First Nations Reserve.geojson").then(res => res.json()),
     fetch("data/Metis Settlement.geojson").then(res => res.json()),
     fetch("data/WildlifeCorridor.geojson").then(res => res.json())
 ])
-    .then(([wmuData, crownData, parkData, firstNationsData, metisData, wildlifeCorridorData]) => {
+    .then(([wmuData, agricultureData, crownData, parkData, firstNationsData, metisData, wildlifeCorridorData]) => {
 
         // =====================================================
         // User location
@@ -110,6 +111,12 @@ Promise.all([
             }
         });
 
+        // --- Agriculture Dispositions --- 
+
+        const agricultureLayer = L.geoJSON(agricultureData, {
+            style: { color: "#7b2d8e", weight: 0.5, fillOpacity: 0.3 },
+        });
+
         // --- Crown Land (Green Area only) ---
         const crownLayer = L.geoJSON(crownData, {
             filter: feature => feature.properties.t18834Name === "Green Area",
@@ -125,30 +132,22 @@ Promise.all([
         // --- First Nations Reserves ---
         const firstNationsLayer = L.geoJSON(firstNationsData, {
             style: { color: "#ae2e1d", weight: 1, fillOpacity: 0.3 },
-            onEachFeature: (feature, layer) => {
-                layer.bindPopup(`<h3>First Nations Reserve</h3><p>${feature.properties.IRES_NAME || "Unknown"}</p>`);
-            }
         });
 
         // --- Metis Settlements ---
         const metisLayer = L.geoJSON(metisData, {
             style: { color: "#004773", weight: 1, fillOpacity: 0.3 },
-            onEachFeature: (feature, layer) => {
-                layer.bindPopup(`<h3>Metis Settlement</h3><p>${feature.properties.METIS_NAME || "Unknown"}</p>`);
-            }
         });
 
         /// --- Wild life corridors --- 
         const wildlifeCorridorLayer = L.geoJSON(wildlifeCorridorData, {
             style: { color: "black", weight: 2, fillOpacity: 0.3 },
-            onEachFeature: (feature, layer) => {
-                layer.bindPopup(`<h3>Wildlife Corridor</h3><p>${feature.properties.Corridor_Name || "Unknown"}</p>`);
-            }
         });
 
         // --- One single overlays object for everything ---
         const overlays = {
             [swatchLabel("#d89e22", "WMU Boundaries")]: wmuLayer,
+            [swatchLabel("#7b2d8e", "Agriculture Dispositions")]: agricultureLayer,
             [swatchLabel("#21c153", "Crown Land")]: crownLayer,
             [swatchLabel("black", "Provincial/National Parks")]: parkLayer,
             [swatchLabel("black", "Wildlife Corridors")]: wildlifeCorridorLayer,
