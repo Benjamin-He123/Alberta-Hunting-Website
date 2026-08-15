@@ -69,9 +69,10 @@ Promise.all([
     fetch("data/Protected Area Designations.geojson").then(res => res.json()),
     fetch("data/First Nations Reserve.geojson").then(res => res.json()),
     fetch("data/Metis Settlement.geojson").then(res => res.json()),
-    fetch("data/WildlifeCorridor.geojson").then(res => res.json())
+    fetch("data/WildlifeCorridor.geojson").then(res => res.json()),
+    fetch("data/DND Military Bases.geojson").then(res => res.json())
 ])
-    .then(([wmuData, agricultureData, crownData, parkData, firstNationsData, metisData, wildlifeCorridorData]) => {
+    .then(([wmuData, agricultureData, crownData, parkData, firstNationsData, metisData, wildlifeCorridorData, dndData]) => {
 
         // =====================================================
         // User location
@@ -93,7 +94,7 @@ Promise.all([
 
         // --- WMU Boundaries ---
         const wmuLayer = L.geoJSON(wmuData, {
-            style: { color: "#d89e22 ", weight: 1, fill: false, opacity: 1 },
+            style: { color: "#C25310 ", weight: 1, fill: false, opacity: 1 },
             onEachFeature: (feature, layer) => {
                 layer.bindPopup(`
                     <h3>Wildlife Management Unit</h3>
@@ -115,6 +116,31 @@ Promise.all([
 
         const agricultureLayer = L.geoJSON(agricultureData, {
             style: { color: "#7b2d8e", weight: 0.5, fillOpacity: 0.3 },
+            onEachFeature: (feature, layer) => {
+
+
+                if (feature.properties && feature.properties.ACTIVITY_ID) {
+                    layer.bindTooltip(feature.properties.ACTIVITY_ID, {
+                        sticky: true, 
+                    });
+                }
+
+                layer.on("mouseover", (e) => {
+                    layer.setStyle({
+                        weight: 2,
+                        color: "#7b2d8e",
+                        fillOpacity: 0.5
+                    });
+                });
+
+                layer.on("mouseout", (e) => {
+                    layer.setStyle({
+                        weight: 0.5,
+                        color: "#7b2d8e",
+                        fillOpacity: 0.3
+                    });
+                });
+            }
         });
 
         // --- Crown Land (Green Area only) ---
@@ -128,6 +154,12 @@ Promise.all([
             filter: feature => feature.properties.TYPE === "PP" || feature.properties.TYPE === "NP",
             style: { color: "black", weight: 1, fillOpacity: 0.5 }
         });
+
+        // --- The other park types (RP, RP/PP, RP/NP) are not included in the legend, but are still displayed on the map ---
+        const otherParkLayer = L.geoJSON(parkData, {
+            filter: feature => !["PP", "NP"].includes(feature.properties.TYPE),
+            style: { color: "#darkgreen", weight: 1, fillOpacity: 0.5 }
+        }).addTo(map);
 
         // --- First Nations Reserves ---
         const firstNationsLayer = L.geoJSON(firstNationsData, {
@@ -144,16 +176,22 @@ Promise.all([
             style: { color: "black", weight: 2, fillOpacity: 0.3 },
         });
 
+        /// --- DND Military Bases ---
+        const dndLayer = L.geoJSON(dndData, {
+            style: { color: "#E066FF", weight: 2, fillOpacity: 0.3 },
+        });
+
         // --- One single overlays object for everything ---
         const overlays = {
             [swatchLabel("#d89e22", "WMU Boundaries")]: wmuLayer,
             [swatchLabel("#7b2d8e", "Agriculture Dispositions")]: agricultureLayer,
             [swatchLabel("#21c153", "Crown Land")]: crownLayer,
             [swatchLabel("black", "Provincial/National Parks")]: parkLayer,
+            [swatchLabel("darkgreen", "Other Park Lands/Protected Areas")]: otherParkLayer,
             [swatchLabel("black", "Wildlife Corridors")]: wildlifeCorridorLayer,
             [swatchLabel("#ae2e1d", "First Nations Reserves")]: firstNationsLayer,
             [swatchLabel("#004773", "Metis Settlements")]: metisLayer,
-     
+            [swatchLabel("#E066FF", "DND Military Bases")]: dndLayer
         };
 
         // --- Restore saved layer visibility from localStorage ---
