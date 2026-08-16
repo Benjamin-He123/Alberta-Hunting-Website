@@ -142,19 +142,31 @@ header p {
 /* --- For mobile devices, adjust the header position and size --- */
 @media (max-width: 600px) {
     header {
-        top: 12px;
-        left: 50px;
-        right: 50px;
+        top: 5vh;
+        left: 15vw;
         max-width: 280px;
-        font-size: 12px;
+    }
+    header p {
+        font-size: 10px;
+    }
+    .leaflet-top.leaflet-right {
+        top: 3.8vh;
+    }
+    .leaflet-top.leaflet-left {
+        top: 3.8vh;
     }
     #disclaimer-toggle {
-        bottom: 35px;
-        left: 10px;
+        bottom: 4.5vh;
+        left: 2vw;
+    }
+    #disclaimer-box {
+        bottom: 10vh;
+        left: 2vw;
+        max-width: 80vw;
     }
     #distance-tool {
-        bottom: 36px;
-        left: 45px;
+        bottom: 4.7vh;
+        left: 10.5vw;
     }
     .leaflet-control-attribution {
         font-size: 10px;
