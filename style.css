@@ -141,6 +141,11 @@ header p {
 
 /* --- For mobile devices, adjust the header position and size --- */
 @media (max-width: 600px) {
+    #map,
+    #map-header {
+        height: 97vh; 
+    }
+
     header {
         top: 1vh;
         left: 15vw;
