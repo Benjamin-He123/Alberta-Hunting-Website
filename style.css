@@ -138,3 +138,25 @@ header p {
     color: black;
 }
 
+
+/* --- For mobile devices, adjust the header position and size --- */
+@media (max-width: 600px) {
+    header {
+        top: 12px;
+        left: 50px;
+        right: 50px;
+        max-width: 280px;
+        font-size: 12px;
+    }
+    #disclaimer-toggle {
+        bottom: 35px;
+        left: 10px;
+    }
+    #distance-tool {
+        bottom: 36px;
+        left: 45px;
+    }
+    .leaflet-control-attribution {
+        font-size: 10px;
+    }
+}

@@ -173,7 +173,7 @@ Promise.all([
 
         /// --- Wild life corridors --- 
         const wildlifeCorridorLayer = L.geoJSON(wildlifeCorridorData, {
-            style: { color: "black", weight: 2, fillOpacity: 0.3 },
+            style: { color: "black", weight: 1, fillOpacity: 0.3 },
         });
 
         /// --- DND Military Bases ---
