@@ -117,13 +117,10 @@ Promise.all([
         const agricultureLayer = L.geoJSON(agricultureData, {
             style: { color: "#7b2d8e", weight: 0.5, fillOpacity: 0.3 },
             onEachFeature: (feature, layer) => {
-
-
-                if (feature.properties && feature.properties.ACTIVITY_ID) {
-                    layer.bindTooltip(feature.properties.ACTIVITY_ID, {
-                        sticky: true, 
-                    });
-                }
+                layer.bindPopup(`
+                    <h3>Agriculture Disposition</h3>
+                    <p>Activity ID: ${feature.properties.ACTIVITY_ID || "Unknown"}</p>
+                `);
 
                 layer.on("mouseover", (e) => {
                     layer.setStyle({
@@ -142,6 +139,25 @@ Promise.all([
                 });
             }
         });
+
+        /*
+        map.on('zoomend', function () {
+            const currentZoom = map.getZoom();
+
+            // Hide the layer if the user zooms out past level 10
+            if (currentZoom < 10) {
+                if (map.hasLayer(agricultureLayer)) {
+                    map.removeLayer(agricultureLayer);
+                }
+            } else {
+                // Show the layer again if they zoom back in
+                if (!map.hasLayer(agricultureLayer)) {
+                    map.addLayer(agricultureLayer);
+                }
+            }
+        });
+        */
+
 
         // --- Crown Land (Green Area only) ---
         const crownLayer = L.geoJSON(crownData, {
@@ -297,13 +313,21 @@ loadSavedMarkers();
 // --- Click the map to start placing a marker ---
 map.on("click", e => {
     if (measuring) {
-        handleMeasureClick(e);
-        return; // don't place a marker if in measuring mode
+        if (measurePoints.length < 2) {
+            handleMeasureClick(e);
+        } else {
+            // already have 2 points — this click exits the tool instead of placing a 3rd point
+            exitMeasureTool();
+        }
+        return;
+    }
+
+    if (!addingMarker) {
+        return; // clicking the map does nothing unless marker mode is on
     }
 
     pendingCoords = e.latlng;
 
-    // Open a temporary popup asking for a description
     L.popup()
         .setLatLng(pendingCoords)
         .setContent(`
@@ -319,18 +343,24 @@ map.on("click", e => {
 function confirmMarker() {
     const description = document.getElementById("markerDescInput").value || "No description";
 
-    map.closePopup(); // close the "enter description" popup first
+    map.closePopup();
 
     const marker = L.marker(pendingCoords, { icon: clickMarkerIcon }).addTo(map);
 
     marker.bindPopup(`
         ${description}<br>
         <button onclick="deleteMarker(${userMarkers.length})">Delete</button>
-    `).openPopup(); // show the new popup right away
+    `).openPopup();
 
     userMarkers.push(marker);
     saveMarkers();
-}
+
+    // reset marker mode after placing one
+    addingMarker = false;
+    document.getElementById("marker-tool").classList.remove("active");
+    map.getContainer().style.cursor = "";
+} 
+
 
 // --- Called when a marker's own delete button is clicked ---
 function deleteMarker(index) {
@@ -338,7 +368,7 @@ function deleteMarker(index) {
     userMarkers[index] = null;
     saveMarkers();
 }
-//
+
 // =====================================================
 // Distance measurement tool
 // =====================================================
@@ -353,13 +383,20 @@ function toggleMeasureTool() {
     const btn = document.getElementById("distance-tool");
 
     if (measuring) {
-        clearMeasurement(); // reset any previous measurement first
+        clearMeasurement();
         btn.classList.add("active");
         map.getContainer().style.cursor = "crosshair";
     } else {
-        btn.classList.remove("active");
-        map.getContainer().style.cursor = "";
+        exitMeasureTool();
     }
+}
+
+function exitMeasureTool() {
+    measuring = false;
+    const btn = document.getElementById("distance-tool");
+    btn.classList.remove("active");
+    map.getContainer().style.cursor = "";
+    clearMeasurement();
 }
 
 function handleMeasureClick(e) {
@@ -381,11 +418,6 @@ function handleMeasureClick(e) {
         const resultBox = document.getElementById("distance-result");
         resultBox.textContent = `Distance: ${distanceKm.toFixed(2)} km`;
         resultBox.style.display = "block";
-
-        // measuring mode auto-turns off after the second point
-        measuring = false;
-        document.getElementById("distance-tool").classList.remove("active");
-        map.getContainer().style.cursor = "";
     }
 }
 
@@ -401,3 +433,27 @@ function clearMeasurement() {
 }
 
 document.getElementById("distance-tool").addEventListener("click", toggleMeasureTool);
+
+
+// =====================================================
+// Marker placement tool
+// =====================================================
+
+let addingMarker = false;
+
+function toggleMarkerTool() {
+    addingMarker = !addingMarker;
+    const btn = document.getElementById("marker-tool");
+
+    if (addingMarker) {
+        btn.classList.add("active");
+        map.getContainer().style.cursor = "crosshair";
+    } else {
+        btn.classList.remove("active");
+        map.getContainer().style.cursor = "";
+    }
+}
+
+document.getElementById("marker-tool").addEventListener("click", toggleMarkerTool);
+
+

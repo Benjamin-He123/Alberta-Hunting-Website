@@ -16,6 +16,28 @@ html, body {
     width: 100%;
 }
 
+header {
+    position: absolute;
+    top: 25px;
+    left: 60px; /* clears Leaflet's zoom +/- control, which sits top-left */
+    z-index: 1000; /* Leaflet's own controls sit around 400-1000, so this stays above the map */
+    background: rgba(255, 255, 255, 0.92);
+    padding: 8px 8px;
+    border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
+    max-width: 400px;
+    pointer-events: none; 
+}
+
+header p {
+    margin: 0;
+    font-size: 14px;
+    font-weight: 500;
+    color: #222;
+    line-height: 1.4;
+}
+
+/* --- Disclaimer toggle button and box styles --- */
 #disclaimer-toggle {
     position: absolute;
     bottom: 15px;
@@ -62,6 +84,7 @@ html, body {
 }
 
 
+/* --- Distance measuring tool styles --- */
 #distance-tool {
     position: absolute;
     bottom: 17px; /* sits just above the disclaimer icon (10px + 32px + 10px gap) */
@@ -103,26 +126,31 @@ html, body {
     display: none;
 }
 
-
-header {
+/* --- Marker icon styles --- */
+#marker-tool {
     position: absolute;
-    top: 25px;
-    left: 60px; /* clears Leaflet's zoom +/- control, which sits top-left */
-    z-index: 1000; /* Leaflet's own controls sit around 400-1000, so this stays above the map */
-    background: rgba(255, 255, 255, 0.92);
-    padding: 8px 8px;
-    border-radius: 10px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
-    max-width: 400px;
-    pointer-events: none; 
+    bottom: 17px; /* sits just above the disclaimer icon (10px + 32px + 10px gap) */
+    left: 85px;
+    z-index: 1000;
+    background: #F5F5F5;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+    cursor: pointer;
+    transition: transform 0.15s ease, background 0.15s ease;
 }
 
-header p {
-    margin: 0;
-    font-size: 14px;
-    font-weight: 500;
-    color: #222;
-    line-height: 1.4;
+#marker-tool:hover {
+    transform: scale(1.1);
+}
+
+#marker-tool.active {
+    background: #ffe082; /* same visual cue style as your distance tool */
 }
 
 .wmu-label {
