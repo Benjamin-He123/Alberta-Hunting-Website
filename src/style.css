@@ -1,0 +1,208 @@
+html, body {
+    height: 100%;
+    margin: 0;
+}
+
+
+#map {
+    height: 100vh;
+    width: 100%;
+}
+
+
+#map-header {
+    position: relative;
+    height: 100vh;
+    width: 100%;
+}
+
+header {
+    position: absolute;
+    top: 25px;
+    left: 60px; /* clears Leaflet's zoom +/- control, which sits top-left */
+    z-index: 1000; /* Leaflet's own controls sit around 400-1000, so this stays above the map */
+    background: rgba(255, 255, 255, 0.92);
+    padding: 8px 8px;
+    border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
+    max-width: 400px;
+    pointer-events: none; 
+}
+
+header p {
+    margin: 0;
+    font-size: 14px;
+    font-weight: 500;
+    color: #222;
+    line-height: 1.4;
+}
+
+/* --- Disclaimer toggle button and box styles --- */
+#disclaimer-toggle {
+    position: absolute;
+    bottom: 15px;
+    left: 15px;
+    z-index: 1000;
+    background: #ae2e1d;
+    width: 30px;
+    height: 25px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+    cursor: pointer;
+    padding-bottom: 5px;
+}
+
+#disclaimer-toggle:hover {
+    background: #d89e22;
+}
+
+#disclaimer-toggle span {
+    position: relative;
+}
+
+#disclaimer-box {
+    position: absolute;
+    bottom: 50px;
+    left: 10px;
+    z-index: 1000;
+    background: rgba(255, 255, 255, 0.95);
+    padding: 10px 14px;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
+    font-size: 12px;
+    color: #333;
+    max-width: 260px;
+    display: none;
+}
+
+#disclaimer-box.visible {
+    display: block;
+}
+
+
+/* --- Distance measuring tool styles --- */
+#distance-tool {
+    position: absolute;
+    bottom: 17px; /* sits just above the disclaimer icon (10px + 32px + 10px gap) */
+    left: 50px;
+    z-index: 1000;
+    background: #F5F5F5;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+    cursor: pointer;
+    transition: transform 0.15s ease, background 0.15s ease;
+}
+
+#distance-tool:hover {
+    transform: scale(1.1);
+}
+
+#distance-tool.active {
+    background: #ffe082; /* visual cue that measuring mode is on */
+}
+
+#distance-result {
+    position: absolute;
+    bottom: 52px;
+    left: 52px; /* sits to the right of the tool button */
+    z-index: 1000;
+    background: rgba(255, 255, 255, 0.95);
+    padding: 8px 14px;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
+    font-size: 13px;
+    font-weight: 600;
+    color: #222;
+    display: none;
+}
+
+/* --- Marker icon styles --- */
+#marker-tool {
+    position: absolute;
+    bottom: 17px; /* sits just above the disclaimer icon (10px + 32px + 10px gap) */
+    left: 85px;
+    z-index: 1000;
+    background: #F5F5F5;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+    cursor: pointer;
+    transition: transform 0.15s ease, background 0.15s ease;
+}
+
+#marker-tool:hover {
+    transform: scale(1.1);
+}
+
+#marker-tool.active {
+    background: #ffe082; /* same visual cue style as your distance tool */
+}
+
+.wmu-label {
+    background: none;
+    padding: 0;
+    background-color: white;
+    text-align: center;
+    width: fit-content;
+    height: fit-content;
+    box-shadow: none;
+    font-size: 9px;
+    font-weight: bold;
+    color: black;
+}
+
+
+/* --- For mobile devices, adjust the header position and size --- */
+@media (max-width: 600px) {
+    #map,
+    #map-header {
+        height: 97vh; 
+    }
+
+    header {
+        top: 1vh;
+        left: 15vw;
+        max-width: 280px;
+    }
+    header p {
+        font-size: 10px;
+    }
+    .leaflet-top.leaflet-right {
+        top: 0vh;
+    }
+    .leaflet-top.leaflet-left {
+        top: 0vh;
+    }
+    #disclaimer-toggle {
+        bottom: 4.5vh;
+        left: 2vw;
+    }
+    #disclaimer-box {
+        bottom: 10vh;
+        left: 2vw;
+        max-width: 80vw;
+    }
+    #distance-tool {
+        bottom: 4.7vh;
+        left: 10.5vw;
+    }
+    .leaflet-control-attribution {
+        font-size: 10px;
+        bottom: 0vh;
+    }
+}
