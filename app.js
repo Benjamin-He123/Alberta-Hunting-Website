@@ -71,7 +71,7 @@ Promise.all([
     fetch("data/Metis Settlement.geojson").then(res => res.json()),
     fetch("data/WildlifeCorridor.geojson").then(res => res.json()),
     fetch("data/DND Military Bases.geojson").then(res => res.json()),
-    fetch("data/all major roads in alberta.geojson").then(res => res.json())
+    fetch("data/highways_in_alberta.geojson").then(res => res.json())
 ])
     .then(([wmuData, agricultureData, crownData, parkData, firstNationsData, metisData, wildlifeCorridorData, dndData, roadsData]) => {
 
@@ -200,13 +200,12 @@ Promise.all([
         const dndLayer = L.geoJSON(dndData, {
             style: { color: "#E066FF", weight: 2, fillOpacity: 0.3 },
         });
-
-        /*
+ 
         /// --- Major Alberta Roads ---
         const roadsLayer = L.geoJSON(roadsData, {
             style: { color: "#808080", weight: 2, fillOpacity: 0.3 },
         });
-        */
+        
 
         // --- One single overlays object for everything ---
         const overlays = {
@@ -218,10 +217,9 @@ Promise.all([
             [swatchLabel("black", "Wildlife Corridors")]: wildlifeCorridorLayer,
             [swatchLabel("#ae2e1d", "First Nations Reserves")]: firstNationsLayer,
             [swatchLabel("#004773", "Metis Settlements")]: metisLayer,
-            [swatchLabel("#E066FF", "DND Military Bases")]: dndLayer,
-            /*
+            [swatchLabel("#E066FF", "DND Military Bases")]: dndLayer,   
             [swatchLabel("#808080", "Major Alberta Roads")]: roadsLayer
-            */
+            
         };
 
         // --- Restore saved layer visibility from localStorage ---
