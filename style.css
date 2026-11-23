@@ -206,3 +206,41 @@ header p {
         bottom: 0vh;
     }
 }
+
+/* 
+For the contact info
+*/
+
+/* Contact button positioned on the map */
+#contact {
+    position: absolute;
+    bottom: 1.5vh;
+    left: 2.5vw;
+    z-index: 1000;
+    border-radius: 4px;
+    padding: 6px 12px;
+    font-weight: bold;
+    cursor: pointer;
+    color:#0000EE;
+}
+
+/* Popup box (hidden by default) */
+#contact-box {
+    display: none;
+    position: absolute;
+    bottom: 65px;
+    left: 10px;
+    z-index: 1000;
+    max-width: 300px;
+    background: white;
+    padding: 14px;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+    font-size: 14px;
+    line-height: 1.4;
+}
+
+/* Shown when toggleContact() runs */
+#contact-box.visible {
+    display: block;
+}

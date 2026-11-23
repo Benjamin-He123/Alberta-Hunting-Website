@@ -53,9 +53,16 @@ function swatchLabel(color, text) {
     "></span>${text}`;
 }
 
+function toggleContact() {
+    document.getElementById("disclaimer-box").classList.remove("visible");
+    document.getElementById("contact-box").classList.toggle("visible");
+}
+
 function toggleDisclaimer() {
+    document.getElementById("contact-box").classList.remove("visible");
     document.getElementById("disclaimer-box").classList.toggle("visible");
 }
+
 
 
 // =====================================================
